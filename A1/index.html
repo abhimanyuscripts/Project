@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend Quiz App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <header>
+        <div id="quiz-header-content" class="header-content">
+            </div>
+        <div class="theme-switcher">
+            <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#FFF" d="M12 3.73a8.27 8.27 0 1 0 8.27 8.27A8.28 8.28 0 0 0 12 3.73ZM12 22a10 10 0 1 1 10-10 10 10 0 0 1-10 10Z"/><path fill="#FFF" d="M12 5.773a6.227 6.227 0 0 0-6.227 6.227A6.227 6.227 0 0 0 12 18.227V5.773Z"/></svg>
+            <label class="switch">
+                <input type="checkbox" id="theme-toggle">
+                <span class="slider"></span>
+            </label>
+            <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#FFF" d="M18.3 12.3c0 3.47-2.83 6.3-6.3 6.3S5.7 15.77 5.7 12.3c0-3.13 2.27-5.72 5.25-6.23a.75.75 0 0 1 .8.66.75.75 0 0 1-.66.8c-2.2.45-3.89 2.45-3.89 4.77 0 2.65 2.15 4.8 4.8 4.8s4.8-2.15 4.8-4.8c0-2.32-1.69-4.32-3.89-4.77a.75.75 0 0 1 .14-1.46c2.98.5 5.25 3.1 5.25 6.23Z"/></svg>
+        </div>
+    </header>
+
+    <main>
+        <section id="home-screen">
+            <div class="welcome-text">
+                <h1>Welcome to the <br><strong>Frontend Quiz!</strong></h1>
+                <p>Pick a subject to get started.</p>
+            </div>
+            <div class="subjects">
+                </div>
+        </section>
+
+        <section id="quiz-screen" class="hidden">
+            <div class="question-container">
+                <p class="question-number"></p>
+                <h2 class="question-text"></h2>
+                <div class="progress-bar-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+            <div class="options-container">
+                </div>
+            <button id="submit-answer" class="submit-btn">Submit Answer</button>
+            <button id="next-question" class="submit-btn hidden">Next Question</button>
+            <p id="error-message" class="error-msg hidden">Please select an answer</p>
+        </section>
+
+        <section id="results-screen" class="hidden">
+             <div class="welcome-text">
+                <h1>Quiz completed <br><strong>You scored...</strong></h1>
+            </div>
+            <div class="results-summary">
+                <div class="final-score-card">
+                   </div>
+                <button id="play-again" class="submit-btn">Play Again</button>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
