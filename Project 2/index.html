@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="window-mockup">
+        <div class="window-header">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="otp-container">
+            <h2>Verify your email address</h2>
+            <p class="subtitle">A four-digit code has been sent to your email address. Please enter the code below to verify your email.</p>
+            
+            <form id="otp-form">
+                <div class="otp-inputs" id="otp-inputs">
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-digit" required>
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-digit" required>
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-digit" required>
+                    <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-digit" required>
+                </div>
+                <button type="submit" class="btn-verify">Verify OTP</button>
+            </form>
+            <p id="message-area"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

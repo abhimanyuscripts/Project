@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Task Management App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        // Custom Tailwind configuration
+        tailwind.config = {
+            darkMode: 'class', // Enable dark mode using a class
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'main-purple': '#635FC7',
+                        'main-purple-hover': '#A8A4FF',
+                        'dark-bg': '#20212C',
+                        'dark-grey': '#2B2C37',
+                        'lines-dark': '#3E3F4E',
+                        'medium-grey': '#828FA3',
+                        'light-bg': '#F4F7FD',
+                        'light-grey': '#E4EBFA',
+                        'lines-light': '#E4EBFA',
+                        'red-custom': '#EA5555',
+                        'red-hover': '#FF9898',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for webkit browsers */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Style for the column titles */
+        .column-title::before {
+            content: '';
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+        .column-title.todo::before { background-color: #49C4E5; }
+        .column-title.doing::before { background-color: #8471F2; }
+        .column-title.done::before { background-color: #67E2AE; }
+    </style>
+</head>
+<body class="bg-light-bg dark:bg-dark-bg font-sans transition-colors duration-300">
+
+    <div id="app-container" class="flex h-screen w-screen">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="bg-white dark:bg-dark-grey flex-shrink-0 flex flex-col w-64 border-r border-lines-light dark:border-lines-dark p-6 transition-all duration-300">
+            <div class="flex items-center mb-8">
+                 <!-- Logo -->
+                <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-3">
+                    <rect width="6" height="25" rx="2" fill="#635FC7"/>
+                    <rect opacity="0.75" x="9" width="6" height="25" rx="2" fill="#635FC7"/>
+                    <rect opacity="0.5" x="18" width="6" height="25" rx="2" fill="#635FC7"/>
+                </svg>
+                <h1 class="text-3xl font-bold text-black dark:text-white">kanban</h1>
+            </div>
+
+            <div class="flex-grow">
+                <h2 class="text-xs font-bold text-medium-grey tracking-widest uppercase mb-4">All Boards (1)</h2>
+                <ul>
+                    <li class="mb-2">
+                        <a href="#" class="flex items-center text-white bg-main-purple rounded-r-full py-3 px-6 -ml-6">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-3">
+                                <path d="M0 2.66667C0 1.19391 1.19391 0 2.66667 0H13.3333C14.8061 0 16 1.19391 16 2.66667V13.3333C16 14.8061 14.8061 16 13.3333 16H2.66667C1.19391 16 0 14.8061 0 13.3333V2.66667ZM5.33333 13.3333V2.66667H2.66667V13.3333H5.33333ZM13.3333 2.66667H8V8H13.3333V2.66667ZM8 13.3333V10.6667H13.3333V13.3333H8Z" fill="white"/>
+                            </svg>
+                            <span class="font-bold">Platform Launch</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Theme Toggle -->
+            <div class="mt-auto">
+                <div class="bg-light-bg dark:bg-dark-bg rounded-md p-3.5 flex items-center justify-center space-x-6">
+                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.8182 10.3245C18.1091 10.3245 17.5455 9.76093 17.5455 9.0518C17.5455 5.43634 14.6155 2.50634 11.0001 2.50634C10.2909 2.50634 9.72734 1.94271 9.72734 1.23358C9.72734 0.524456 10.2909 -0.0391846 11.0001 -0.0391846C16.2364 -0.0391846 20.4546 4.17907 20.4546 9.41544C20.4546 9.93907 20.0273 10.3245 19.5455 10.3245L18.8182 10.3245Z" fill="#828FA3"/>
+                        <path d="M9.54545 18.2336C14.8091 18.2336 19.0909 13.9518 19.0909 8.68816C19.0909 8.16453 18.6636 7.77907 18.1818 7.77907C17.6582 7.77907 17.2727 8.20634 17.2727 8.73002C17.2727 12.8336 13.8182 16.2882 9.71455 16.3271C9.61091 16.3271 9.50727 16.3271 9.40364 16.3271C4.90909 16.3271 1.27273 12.6909 1.27273 8.19634C1.27273 3.7018 4.90909 0.0654361 9.40364 0.0654361C9.92727 0.0654361 10.3127 0.492708 10.3127 1.01634C10.3127 1.54002 9.88545 1.92544 9.40364 1.92544C5.94909 1.92544 3.13636 4.73816 3.13636 8.19634C3.13636 11.6509 5.94909 14.4636 9.40364 14.4636C9.45091 14.4636 9.49818 14.4636 9.54545 14.4636V18.2336Z" fill="#828FA3"/>
+                    </svg>
+                    <div id="theme-toggle-btn" class="w-10 h-5 bg-main-purple rounded-full flex items-center p-1 cursor-pointer">
+                        <div id="theme-toggle-dot" class="w-3.5 h-3.5 bg-white rounded-full transition-transform duration-300 transform translate-x-0"></div>
+                    </div>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16ZM8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" fill="#828FA3"/>
+                    </svg>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-grow flex flex-col">
+            <!-- Header -->
+            <header class="bg-white dark:bg-dark-grey flex-shrink-0 h-24 flex items-center justify-between px-8 border-b border-lines-light dark:border-lines-dark">
+                <h1 class="text-2xl font-bold text-black dark:text-white">Platform Launch</h1>
+                <div class="flex items-center">
+                    <button id="add-task-btn" class="bg-main-purple hover:bg-main-purple-hover text-white font-bold py-3 px-6 rounded-full flex items-center">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                            <path d="M7.33333 11.3333V7.33333H11.3333V4.66667H7.33333V0.666667H4.66667V4.66667H0.666667V7.33333H4.66667V11.3333H7.33333Z" fill="white"/>
+                        </svg>
+                        Add New Task
+                    </button>
+                </div>
+            </header>
+
+            <!-- Kanban Board -->
+            <div id="board-container" class="flex-grow p-6 flex space-x-6 overflow-x-auto scrollbar-hide">
+                <!-- Columns will be injected here by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div id="add-task-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white dark:bg-dark-grey rounded-lg p-6 w-full max-w-md mx-4">
+            <h2 class="text-lg font-bold text-black dark:text-white mb-6">Add New Task</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <label for="task-title" class="block text-xs font-bold text-medium-grey dark:text-white mb-2">Title</label>
+                    <input type="text" id="task-title" placeholder="e.g. Take coffee break" class="w-full bg-transparent border border-medium-grey/25 rounded px-4 py-2 text-sm text-black dark:text-white focus:outline-none focus:border-main-purple">
+                </div>
+                <div>
+                    <label for="task-description" class="block text-xs font-bold text-medium-grey dark:text-white mb-2">Description</label>
+                    <textarea id="task-description" placeholder="e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little." class="w-full bg-transparent border border-medium-grey/25 rounded px-4 py-2 text-sm text-black dark:text-white h-28 resize-none focus:outline-none focus:border-main-purple"></textarea>
+                </div>
+                 <div>
+                    <label for="task-status" class="block text-xs font-bold text-medium-grey dark:text-white mb-2">Status</label>
+                    <select id="task-status" class="w-full bg-white dark:bg-dark-grey border border-medium-grey/25 rounded px-4 py-2 text-sm text-black dark:text-white focus:outline-none focus:border-main-purple appearance-none" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23635FC7%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 0.65em auto;">
+                        <!-- Options will be populated by JS -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-6 flex space-x-4">
+                <button id="create-task-btn" class="flex-1 bg-main-purple hover:bg-main-purple-hover text-white text-sm font-bold py-3 rounded-full">Create Task</button>
+                <button id="cancel-task-btn" class="flex-1 bg-light-grey dark:bg-white hover:bg-light-grey/50 text-main-purple text-sm font-bold py-3 rounded-full">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- THEME TOGGLE ---
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+            const themeToggleDot = document.getElementById('theme-toggle-dot');
+            const htmlElement = document.documentElement;
+
+            // Check for saved theme in localStorage
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+                themeToggleDot.style.transform = 'translateX(1.25rem)';
+            } else {
+                htmlElement.classList.remove('dark');
+                themeToggleDot.style.transform = 'translateX(0)';
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark');
+                if (htmlElement.classList.contains('dark')) {
+                    localStorage.setItem('theme', 'dark');
+                    themeToggleDot.style.transform = 'translateX(1.25rem)';
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeToggleDot.style.transform = 'translateX(0)';
+                }
+            });
+
+
+            // --- KANBAN DATA AND RENDERING ---
+            let boardData = {
+                name: "Platform Launch",
+                columns: [
+                    {
+                        name: "Todo",
+                        tasks: [
+                            { title: "Build UI for onboarding flow", description: "", subtasks: 3, completedSubtasks: 0 },
+                            { title: "Build UI for search", description: "", subtasks: 1, completedSubtasks: 0 },
+                            { title: "Build settings page", description: "", subtasks: 3, completedSubtasks: 2 },
+                            { title: "QA and test all major user journeys", description: "", subtasks: 1, completedSubtasks: 0 }
+                        ]
+                    },
+                    {
+                        name: "Doing",
+                        tasks: [
+                            { title: "Design settings and search pages", description: "", subtasks: 3, completedSubtasks: 1 },
+                            { title: "Add account management endpoints", description: "", subtasks: 2, completedSubtasks: 1 },
+                            { title: "Design onboarding flow", description: "", subtasks: 2, completedSubtasks: 1 },
+                            { title: "Add search endpoints", description: "", subtasks: 2, completedSubtasks: 1 },
+                            { title: "Add authentication endpoints", description: "", subtasks: 2, completedSubtasks: 1 },
+                            { title: "Research and validate analytics", description: "", subtasks: 2, completedSubtasks: 1 }
+                        ]
+                    },
+                    {
+                        name: "Done",
+                        tasks: [
+                            { title: "Conduct 5 wireframe tests", description: "", subtasks: 1, completedSubtasks: 1 },
+                            { title: "Create wireframe prototype", description: "", subtasks: 1, completedSubtasks: 1 },
+                            { title: "Review results of usability tests and iterate", description: "", subtasks: 3, completedSubtasks: 3 },
+                            { title: "Create paper prototypes and conduct 10 usability tests with potential customers", description: "", subtasks: 2, completedSubtasks: 2 },
+                            { title: "Market discovery", description: "", subtasks: 2, completedSubtasks: 2 },
+                            { title: "Competitor analysis", description: "", subtasks: 2, completedSubtasks: 2 },
+                            { title: "Research the market", description: "", subtasks: 2, completedSubtasks: 2 },
+                        ]
+                    }
+                ]
+            };
+
+            const boardContainer = document.getElementById('board-container');
+
+            function renderBoard() {
+                boardContainer.innerHTML = ''; // Clear existing board
+                
+                boardData.columns.forEach((column, colIndex) => {
+                    const columnEl = document.createElement('div');
+                    columnEl.className = 'w-72 flex-shrink-0';
+                    
+                    const titleClass = column.name.toLowerCase();
+                    columnEl.innerHTML = `
+                        <h3 class="column-title ${titleClass} text-xs font-bold text-medium-grey tracking-widest uppercase mb-6">
+                            ${column.name} (${column.tasks.length})
+                        </h3>
+                        <div class="space-y-5">
+                            ${column.tasks.map((task, taskIndex) => `
+                                <div class="bg-white dark:bg-dark-grey rounded-lg p-4 shadow-md cursor-pointer group">
+                                    <h4 class="font-bold text-black dark:text-white group-hover:text-main-purple">${task.title}</h4>
+                                    <p class="text-xs font-bold text-medium-grey mt-2">${task.completedSubtasks} of ${task.subtasks} subtasks</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    boardContainer.appendChild(columnEl);
+                });
+
+                // Add the "+ New Column" button
+                const newColumnEl = document.createElement('div');
+                newColumnEl.className = 'w-72 flex-shrink-0 mt-10';
+                newColumnEl.innerHTML = `
+                    <button class="w-full h-full bg-light-grey dark:bg-dark-grey/25 rounded-lg flex items-center justify-center text-2xl font-bold text-medium-grey hover:text-main-purple">
+                        + New Column
+                    </button>
+                `;
+                boardContainer.appendChild(newColumnEl);
+            }
+
+            // --- MODAL LOGIC ---
+            const addTaskBtn = document.getElementById('add-task-btn');
+            const addTaskModal = document.getElementById('add-task-modal');
+            const createTaskBtn = document.getElementById('create-task-btn');
+            const cancelTaskBtn = document.getElementById('cancel-task-btn');
+            const taskStatusSelect = document.getElementById('task-status');
+            const taskTitleInput = document.getElementById('task-title');
+            const taskDescriptionInput = document.getElementById('task-description');
+
+            function openModal() {
+                // Populate status dropdown
+                taskStatusSelect.innerHTML = boardData.columns.map((col, index) => 
+                    `<option value="${index}">${col.name}</option>`
+                ).join('');
+                
+                // Clear inputs
+                taskTitleInput.value = '';
+                taskDescriptionInput.value = '';
+
+                addTaskModal.classList.remove('hidden');
+            }
+
+            function closeModal() {
+                addTaskModal.classList.add('hidden');
+            }
+
+            addTaskBtn.addEventListener('click', openModal);
+            cancelTaskBtn.addEventListener('click', closeModal);
+            // Close modal if clicking on the background
+            addTaskModal.addEventListener('click', (e) => {
+                if (e.target === addTaskModal) {
+                    closeModal();
+                }
+            });
+
+            createTaskBtn.addEventListener('click', () => {
+                const title = taskTitleInput.value.trim();
+                const description = taskDescriptionInput.value.trim();
+                const statusIndex = parseInt(taskStatusSelect.value);
+
+                if (!title) {
+                    alert("Task title cannot be empty!");
+                    return;
+                }
+
+                const newTask = {
+                    title: title,
+                    description: description,
+                    subtasks: 0, // Default values
+                    completedSubtasks: 0
+                };
+
+                boardData.columns[statusIndex].tasks.push(newTask);
+                renderBoard();
+                closeModal();
+            });
+
+
+            // Initial Render
+            renderBoard();
+        });
+    </script>
+</body>
+</html>

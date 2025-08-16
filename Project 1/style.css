@@ -1,0 +1,261 @@
+/* Global Styles & Variables */
+:root {
+    --background-color: #121212;
+    --component-bg-color: #1E1E1E;
+    --primary-text-color: #FFFFFF;
+    --secondary-text-color: #A0A0A0;
+    --border-color: #333333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Header & Navbar */
+.header {
+    padding: 1.5rem 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-text-color);
+    text-decoration: none;
+    border: 2px solid var(--primary-text-color);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-logo:hover {
+    background-color: var(--primary-text-color);
+    color: var(--component-bg-color);
+}
+
+.nav-content {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: var(--secondary-text-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--primary-text-color);
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-login {
+    background-color: var(--component-bg-color);
+    color: var(--primary-text-color);
+}
+
+.btn-login:hover {
+    border-color: var(--primary-text-color);
+}
+
+.btn-signup {
+    background-color: var(--primary-text-color);
+    color: var(--component-bg-color);
+}
+
+.btn-signup:hover {
+    background-color: #dddddd;
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+    z-index: 20; /* Ensure hamburger is above the slide-in menu */
+}
+
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: var(--primary-text-color);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 0;
+    gap: 2rem;
+}
+
+.hero-text {
+    flex: 1;
+}
+
+.subheading {
+    font-size: 0.9rem;
+    color: var(--secondary-text-color);
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+}
+
+.hero-text h1 {
+    font-size: 3.5rem;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+}
+
+.btn-download {
+    background-color: var(--component-bg-color);
+    color: var(--primary-text-color);
+    padding: 1rem 2rem;
+    text-decoration: none;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.btn-download:hover {
+    border-color: var(--primary-text-color);
+}
+
+/* Hero Section Image (Accurate Version) */
+.hero-image {
+    flex: 1;
+    min-height: 450px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Back Phone Mockup */
+.hero-image::before {
+    content: '';
+    position: absolute;
+    width: 220px;
+    height: 450px;
+    background-color: #2a2a2a; /* THIS LINE MAKES THE BACK PHONE SOLID */
+    border: 10px solid #1E1E1E;
+    border-radius: 30px;
+    transform: rotate(-15deg);
+    z-index: 1;
+}
+
+/* Front Phone Mockup */
+.hero-image::after {
+    content: '';
+    position: absolute;
+    width: 220px;
+    height: 450px;
+    background-color: #1E1E1E; /* THIS LINE PROVIDES A SOLID FALLBACK */
+    background-image: url('https://i.imgur.com/kS5x4gp.png'); /* This is the screen image */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 10px solid #1E1E1E;
+    border-radius: 30px;
+    transform: rotate(10deg);
+    z-index: 2;
+}
+
+
+/* Responsive Design (Mobile Menu) */
+@media(max-width: 992px) {
+    .nav-content {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--component-bg-color);
+        transition: left 0.3s ease;
+        z-index: 10;
+    }
+
+    .nav-content.active {
+        left: 0;
+    }
+
+    .nav-menu {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .nav-buttons {
+        flex-direction: column;
+        width: 60%;
+    }
+    
+    .btn { width: 100%; }
+
+    .hamburger {
+        display: block;
+    }
+
+    .hamburger.active .bar:nth-child(2) { opacity: 0; }
+    .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    
+    .hero {
+        flex-direction: column-reverse;
+        text-align: center;
+        padding-top: 2rem;
+    }
+    .hero-text h1 { font-size: 2.5rem; }
+
+    .hero-image { min-height: 350px; }
+    .hero-image::before, .hero-image::after {
+        width: 150px;
+        height: 310px;
+    }
+}

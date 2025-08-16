@@ -1,0 +1,130 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #2d2d2d;
+    --input-bg: #f4f4f4;
+    --heading-color: #2d2d2d;
+    --secondary-text: #757575;
+    --accent-color: #a445ed;
+    --divider-color: #e9e9e9;
+
+    --font-sans: 'Inter', sans-serif;
+    --font-serif: 'Lora', serif;
+    --font-mono: 'Inconsolata', monospace;
+}
+
+body.dark-theme {
+    --bg-color: #050505;
+    --text-color: #ffffff;
+    --input-bg: #1f1f1f;
+    --heading-color: #ffffff;
+    --divider-color: #3a3a3a;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    transition: background-color 0.3s, color 0.3s;
+    line-height: 1.6;
+}
+body.font-sans { --font-family: var(--font-sans); }
+body.font-serif { --font-family: var(--font-serif); }
+body.font-mono { --font-family: var(--font-mono); }
+
+.container {
+    max-width: 740px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.controls { display: flex; align-items: center; gap: 1.5rem; }
+#font-selector {
+    background: none;
+    border: none;
+    color: var(--heading-color);
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 1rem;
+}
+#font-selector:focus { outline: none; }
+
+.theme-toggle { display: flex; align-items: center; gap: 1rem; }
+.theme-toggle input { display: none; }
+.theme-toggle .slider {
+    width: 40px; height: 20px;
+    background-color: var(--secondary-text);
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.theme-toggle .slider::before {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    background-color: white;
+    border-radius: 50%;
+    top: 3px; left: 3px;
+    transition: transform 0.3s;
+}
+.theme-toggle input:checked + .slider { background-color: var(--accent-color); }
+.theme-toggle input:checked + .slider::before { transform: translateX(20px); }
+.moon-icon { stroke: var(--secondary-text); }
+body.dark-theme .moon-icon { stroke: var(--accent-color); }
+
+#search-form { position: relative; margin-bottom: 2rem; }
+#search-input {
+    width: 100%;
+    padding: 1.25rem;
+    border: 1px solid transparent;
+    border-radius: 1rem;
+    background-color: var(--input-bg);
+    color: var(--heading-color);
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+#search-input:focus { border-color: var(--accent-color); outline: none; }
+#search-form button {
+    position: absolute; right: 1.5rem; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+}
+
+.word-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.word-header h1 { font-size: 3rem; margin: 0; }
+.word-header .phonetic { color: var(--accent-color); font-size: 1.5rem; }
+.play-btn {
+    background-color: var(--accent-color); opacity: 0.8;
+    border: none; border-radius: 50%;
+    width: 60px; height: 60px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.2s;
+}
+.play-btn:hover { opacity: 1; }
+.play-btn svg path { fill: white; }
+
+.part-of-speech { display: flex; align-items: center; gap: 1rem; margin: 2rem 0 1rem; }
+.part-of-speech h2 { font-style: italic; font-size: 1.25rem; margin: 0; }
+.part-of-speech::after { content: ''; flex-grow: 1; height: 1px; background-color: var(--divider-color); }
+
+.meaning-header, .synonym-header { color: var(--secondary-text); margin-bottom: 1rem; }
+ul { list-style: none; padding-left: 0; }
+li { margin-bottom: 1rem; padding-left: 1.5rem; position: relative; }
+li::before { content: '•'; color: var(--accent-color); position: absolute; left: 0; }
+
+.synonyms a { color: var(--accent-color); font-weight: bold; text-decoration: none; margin-right: 1rem; }
+.synonyms a:hover { text-decoration: underline; }
+
+.source { border-top: 1px solid var(--divider-color); margin-top: 2rem; padding-top: 1rem; display: flex; gap: 1rem; }
+.source span { color: var(--secondary-text); }
+.source a { color: var(--text-color); }
+
+.error { text-align: center; }
+.error h2 { font-size: 3rem; }

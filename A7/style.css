@@ -1,0 +1,58 @@
+body {
+    background-color: #10141E;
+    font-family: 'Outfit', sans-serif;
+    color: white;
+}
+
+.sidebar { 
+    background-color: #161D2F; 
+}
+
+.search-bar { 
+    color: #5A698F; 
+}
+
+.search-bar:focus { 
+    color: white; 
+}
+
+.card-info { 
+    color: #c3c4c7; 
+}
+
+.trending-card {
+    background-size: cover;
+    background-position: center;
+}
+
+.play-overlay {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.card:hover .play-overlay,
+.trending-card:hover .play-overlay {
+    opacity: 1;
+}
+
+.nav-icon.active path {
+    fill: white;
+}
+
+/* Custom scrollbar for trending section */
+.trending-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.trending-container::-webkit-scrollbar-track {
+    background: #10141E;
+}
+
+.trending-container::-webkit-scrollbar-thumb {
+    background: #5A698F;
+    border-radius: 10px;
+}
+
+.trending-container::-webkit-scrollbar-thumb:hover {
+    background: #FC4747;
+}

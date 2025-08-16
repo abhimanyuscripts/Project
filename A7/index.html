@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entertainment Web App</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500&display=swap" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="lg:flex">
+
+    <!-- Sidebar / Top Nav -->
+    <header class="sidebar lg:fixed lg:h-screen lg:w-24 lg:min-h-[960px] p-5 lg:p-8 flex lg:flex-col justify-between items-center rounded-none lg:rounded-2xl m-0 lg:m-8">
+        <!-- Logo -->
+        <svg class="w-6 h-5 lg:w-8 lg:h-6" width="33" height="27" xmlns="http://www.w3.org/2000/svg"><path d="M32.012 26.92H.012V.92h32v26Z" fill="#FC4747"/></svg>
+        
+        <!-- Navigation -->
+        <nav>
+            <ul class="flex lg:flex-col items-center gap-6 lg:gap-10">
+                <li><a href="#" class="nav-link" data-view="home" title="Home"><svg class="nav-icon active w-5 h-5 lg:w-6 lg:h-6" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M8 0H1C.4 0 0 .4 0 1v7c0 .6.4 1 1 1h7c.6 0 1-.4 1-1V1c0-.6-.4-1-1-1Zm0 11H1c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h7c.6 0 1-.4 1-1v-7c0-.6-.4-1-1-1ZM19 0h-7c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h7c.6 0 1-.4 1-1V1c0-.6-.4-1-1-1Zm0 11h-7c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h7c.6 0 1-.4 1-1v-7c0-.6-.4-1-1-1Z" fill="#5A698F"/></svg></a></li>
+                <li><a href="#" class="nav-link" data-view="movies" title="Movies"><svg class="nav-icon w-5 h-5 lg:w-6 lg:h-6" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M16.956 0H3.044A3.044 3.044 0 0 0 0 3.044v13.912A3.044 3.044 0 0 0 3.044 20h13.912A3.044 3.044 0 0 0 20 16.956V3.044A3.044 3.044 0 0 0 16.956 0ZM4 4h2v2H4V4Zm0 4h2v2H4V8Zm0 4h2v2H4v-2Zm4-4h2v2H8V8Zm0 4h2v2H8v-2Zm0-4h2v2H8V8Zm0 4h2v2H8v-2Zm4-4h2v2h-2V8Zm0 4h2v2h-2v-2Zm4-4h2v2h-2V8Zm0 4h2v2h-2v-2Z" fill="#5A698F"/></svg></a></li>
+                <li><a href="#" class="nav-link" data-view="tv" title="TV Series"><svg class="nav-icon w-5 h-5 lg:w-6 lg:h-6" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M20 4.481H9.08l2.7-3.242L10.22 0 7 3.22 3.78 0 2.22 1.239l2.7 3.242H0V20h20V4.481Zm-8 11.232h-4V14.2h4v1.513Zm0-3.783h-4v-1.513h4v1.513Zm8-3.783H4V6.001h16v2.426Z" fill="#5A698F"/></svg></a></li>
+                <li><a href="#" class="nav-link" data-view="bookmarked" title="Bookmarked"><svg class="nav-icon w-5 h-5 lg:w-6 lg:h-6" width="17" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M15.387 0c.256 0 .512.098.707.293.39.39.39 1.023 0 1.414l-6.793 6.793-1.414-1.414-6.793-6.793c-.39-.39-.39-1.023 0-1.414.39-.39 1.023-.39 1.414 0l5.293 5.293L14.68.293c.195-.195.45-.293.707-.293Z" transform="translate(1 1)" fill="#5A698F"/></svg></a></li>
+            </ul>
+        </nav>
+        
+        <!-- Avatar -->
+        <img class="w-8 h-8 lg:w-10 lg:h-10 rounded-full border-2 border-white" src="https://placehold.co/40x40/FFFFFF/10141E?text=A" alt="User Avatar">
+    </header>
+
+    <!-- Main Content -->
+    <main class="w-full p-5 lg:pl-32">
+        <!-- Search -->
+        <div class="flex items-center gap-4 mb-8">
+            <svg class="w-6 h-6 lg:w-8 lg:h-8" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M27.613 25.72 23.08 21.2a10.56 10.56 0 0 0 2.253-6.533C25.333 8.333 20.44 3.44 14.1 3.44S2.867 8.333 2.867 14.667c0 6.333 4.893 11.226 11.233 11.226a10.56 10.56 0 0 0 6.533-2.253l4.533 4.52a1.333 1.333 0 0 0 1.88 0 1.333 1.333 0 0 0 0-1.88ZM14.1 23.333c-4.8 0-8.667-3.867-8.667-8.666S9.3 6 14.1 6s8.667 3.867 8.667 8.667-3.867 8.666-8.667 8.666Z" fill="#FFF"/></svg>
+            <input id="search-input" type="text" class="search-bar w-full bg-transparent text-2xl font-light focus:outline-none border-b-2 border-transparent focus:border-white/50 pb-2" placeholder="Search for movies or TV series">
+        </div>
+
+        <div id="content-area">
+            <!-- Dynamic content will be injected here -->
+        </div>
+    </main>
+
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

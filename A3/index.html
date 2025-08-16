@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <main class="card">
+        <header>
+            <h1>Password Generator</h1>
+            <p>Create strong and secure passwords effortlessly.</p>
+        </header>
+
+        <section class="output-area">
+            <span id="password-output">Click Generate...</span>
+            <button id="copy-button" title="Copy password">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+        </section>
+
+        <section class="controls">
+            <div class="control-item">
+                <div class="label-group">
+                    <label for="length-slider">Password Length</label>
+                    <span id="length-value">16</span>
+                </div>
+                <input type="range" id="length-slider" min="6" max="32" value="16">
+            </div>
+
+            <div class="control-item">
+                 <label>Settings</label>
+                 <div class="checkbox-group">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="uppercase" checked>
+                        <label for="uppercase">Uppercase (A-Z)</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="lowercase" checked>
+                        <label for="lowercase">Lowercase (a-z)</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="numbers" checked>
+                        <label for="numbers">Numbers (0-9)</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="symbols">
+                        <label for="symbols">Symbols (!@#)</label>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        <button id="generate-button">Generate Password</button>
+    </main>
+</body>
+</html>

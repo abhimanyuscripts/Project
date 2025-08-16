@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planets Fact Site</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@500&family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #070724;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+            font-family: 'League Spartan', sans-serif;
+            color: white;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Antonio', sans-serif;
+            text-transform: uppercase;
+        }
+        .antonio { font-family: 'Antonio', sans-serif; }
+        .spartan { font-family: 'League Spartan', sans-serif; }
+
+        /* Custom focus styles for accessibility */
+        .nav-link:focus, .tab-button:focus {
+            outline: 2px solid #419EBB;
+            outline-offset: 2px;
+        }
+
+        /* Underline animation for nav links */
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 4px;
+            background: var(--planet-color, #419EBB);
+            transition: width .3s;
+            position: absolute;
+            bottom: -28px; /* Adjusted for header height */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        @media (min-width: 768px) {
+             .nav-link::after {
+                bottom: -34px; /* Adjust for medium screens */
+             }
+        }
+
+        @media (min-width: 1024px) {
+             .nav-link::after {
+                bottom: -30px; /* Adjust for large screens */
+             }
+        }
+
+
+        .nav-link.active::after, .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Mobile nav active indicator */
+        .mobile-nav-link.active::after {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--planet-color, #419EBB);
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Tab active state colors */
+        .tab-button.active {
+            background-color: var(--planet-color, #419EBB);
+            border-color: var(--planet-color, #419EBB);
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased">
+
+    <!-- Header -->
+    <header class="border-b border-white/20 px-6 lg:px-8 sticky top-0 bg-[#070724] z-50">
+        <div class="flex items-center justify-between h-20 md:h-24 lg:h-[85px] max-w-7xl mx-auto">
+            <a href="#" class="text-2xl lg:text-3xl antonio tracking-wider uppercase">The Planets</a>
+            
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center h-full">
+                <ul id="desktop-nav" class="flex space-x-8 h-full items-center">
+                    <!-- Desktop nav links will be injected here by JS -->
+                </ul>
+            </nav>
+
+            <!-- Mobile Navigation Toggle -->
+            <button id="mobile-menu-toggle" class="md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="17" viewBox="0 0 24 17" class="fill-white">
+                    <g fill-rule="evenodd"><path d="M0 0h24v3H0zM0 7h24v3H0zM0 14h24v3H0z"/></g>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Menu -->
+    <div id="mobile-menu" class="hidden fixed top-20 left-0 w-full h-full bg-[#070724] z-40 px-6 pt-6">
+        <ul id="mobile-nav" class="divide-y divide-white/10">
+            <!-- Mobile nav links will be injected here by JS -->
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="px-6 lg:px-8 py-10 lg:py-20 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-20">
+            <!-- Planet Image -->
+            <div class="lg:col-span-2 flex items-center justify-center relative h-72 md:h-96 lg:h-[600px]">
+                <img id="planet-image" src="" alt="Image of the planet" class="max-w-full max-h-full transition-transform duration-500 ease-in-out object-contain" onerror="this.src='https://placehold.co/400x400/070724/FFFFFF?text=Image+not+found'; this.onerror=null;">
+                <img id="geology-image" src="" alt="Geology overlay" class="hidden absolute w-24 md:w-32 lg:w-40 bottom-0 lg:bottom-10 object-cover rounded-lg shadow-2xl" onerror="this.style.display='none';">
+            </div>
+
+            <!-- Planet Info & Tabs -->
+            <div class="flex flex-col items-center text-center lg:items-start lg:text-left justify-center">
+                <div class="md:flex md:justify-between md:items-center w-full lg:flex-col lg:items-start">
+                    <div class="mb-8 md:mb-0">
+                        <h1 id="planet-name" class="text-4xl md:text-6xl lg:text-8xl mb-4"></h1>
+                        <p id="planet-description" class="spartan text-white/80 leading-relaxed h-28 md:h-24 lg:h-36"></p>
+                        <p class="mt-4 text-white/50 spartan">
+                            Source : <a id="planet-source" href="#" target="_blank" rel="noopener" class="font-bold underline">Wikipedia <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiI+PHBhdGggZmlsbD0iIzgwODAzNCIgZD0iTTExLjM0LjY2Yy0uMjEtLjIxLS41NS0uMjEtLjc4IDBMNC42IDYuNTlsLS43NS0uNzVhLjU2Mi41NjIgMCAwIDAtLjc4IDBsLS43Ny43N2EuNTYyLjU2MiAwIDAgMCAwIC43OEwxMCAxMS4zNGMuMjEuMjEuNTUgLjIxLjc4IDBMMTIgOC45M3YtMS4wN2wtLjY2LS42NnoiLz48L3N2Zz4=" alt="" class="inline-block ml-1"></a>
+                        </p>
+                    </div>
+                    
+                    <!-- Tabs -->
+                    <div id="tabs" class="w-full md:w-auto mt-8 md:mt-0 lg:mt-10">
+                        <!-- Tab buttons will be injected here by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Stats Section -->
+    <section id="stats-section" class="px-6 lg:px-8 pb-12 max-w-7xl mx-auto">
+        <div id="stats-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+            <!-- Stats boxes will be injected here by JS -->
+        </div>
+    </section>
+
+    <script>
+        const planetData = {
+            "Mercury": {
+                "overview": { "content": "Mercury is the smallest planet in our solar system and closest to the Sun. Its orbit takes 87.97 Earth days, the shortest of all the Sun's planets.", "source": "https://en.wikipedia.org/wiki/Mercury_(planet)" },
+                "structure": { "content": "Mercury appears to have a solid silicate crust and mantle overlying a solid, iron sulfide outer core layer, a deeper liquid core layer, and a solid inner core.", "source": "https://en.wikipedia.org/wiki/Mercury_(planet)#Internal_structure" },
+                "geology": { "content": "Mercury's surface is similar in appearance to that of the Moon, showing extensive mare-like plains and heavy cratering, indicating that it has been geologically inactive for billions of years.", "source": "https://en.wikipedia.org/wiki/Mercury_(planet)#Surface_geology" },
+                "rotation": "58.6 Days", "revolution": "87.97 Days", "radius": "2,439.7 KM", "temperature": "430°c",
+                "images": {
+                    "planet": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Mercury_in_true_color.jpg",
+                    "internal": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Mercury_structure.jpg",
+                    "geology": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Mercury_Caloris_basin_enhanced_color_MESSENGER_mosaic.png"
+                }, "color": "#419EBB"
+            },
+            "Venus": {
+                "overview": { "content": "Venus is the second planet from the Sun. It is named after the Roman goddess of love and beauty. As the brightest natural object in Earth's night sky after the Moon, Venus can cast shadows and can be, on rare occasions, visible to the naked eye in broad daylight.", "source": "https://en.wikipedia.org/wiki/Venus" },
+                "structure": { "content": "The internal structure of Venus is similar to that of Earth: a crust, mantle, and core. The core is at least partially liquid because the two planets have been cooling at about the same rate.", "source": "https://en.wikipedia.org/wiki/Venus#Internal_structure" },
+                "geology": { "content": "Much of the Venusian surface appears to have been shaped by volcanic activity. Venus has several times as many volcanoes as Earth, and it has 167 large volcanoes that are over 100 km (60 mi) across.", "source": "https://en.wikipedia.org/wiki/Venus#Geography" },
+                "rotation": "243 Days", "revolution": "224.7 Days", "radius": "6,051.8 KM", "temperature": "471°c",
+                "images": {
+                    "planet": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg",
+                    "internal": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Venus_structure.svg/1024px-Venus_structure.svg.png",
+                    "geology": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Venus_-_3D_perspective_view_of_Maat_Mons.jpg"
+                }, "color": "#EDA249"
+            },
+            "Earth": {
+                "overview": { "content": "Third planet from the Sun and the only astronomical object known to harbor life. About 29.2% of Earth's surface is land consisting of continents and islands. The remaining 70.8% is covered with water.", "source": "https://en.wikipedia.org/wiki/Earth" },
+                "structure": { "content": "Earth's interior is divided into layers by their chemical or physical properties. The outer layer is a silicate solid crust, underlain by a viscous solid mantle. The core is a liquid outer core and a solid inner core.", "source": "https://en.wikipedia.org/wiki/Earth%27s_internal_structure" },
+                "geology": { "content": "The Earth's lithosphere is broken into tectonic plates that move, producing earthquakes, volcanoes, and mountains. The Earth's surface is constantly being reshaped by erosion and tectonic activity.", "source": "https://en.wikipedia.org/wiki/Geology_of_Earth" },
+                "rotation": "0.99 Days", "revolution": "365.26 Days", "radius": "6,371 KM", "temperature": "16°c",
+                "images": {
+                    "planet": "https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg",
+                    "internal": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Earth-crust-cutaway-english.svg/1024px-Earth-crust-cutaway-english.svg.png",
+                    "geology": "https://upload.wikimedia.org/wikipedia/commons/4/47/Great_Lakes_from_space_crop_labeled.jpg"
+                }, "color": "#6f2ed6"
+            },
+            "Mars": {
+                "overview": { "content": "Mars is the fourth planet from the Sun and the second-smallest planet, being larger than only Mercury. In English, Mars carries the name of the Roman god of war and is often referred to as the 'Red Planet'.", "source": "https://en.wikipedia.org/wiki/Mars" },
+                "structure": { "content": "Like Earth, Mars has differentiated into a dense metallic core overlaid by less dense materials. Current models of its interior imply a core with a radius of about 1,794 ± 65 kilometers.", "source": "https://en.wikipedia.org/wiki/Mars#Internal_structure" },
+                "geology": { "content": "Mars is a terrestrial planet whose surface consists of minerals containing silicon and oxygen, metals, and other elements that typically make up rock. The surface is primarily composed of tholeiitic basalt.", "source": "https://en.wikipedia.org/wiki/Geology_of_Mars" },
+                "rotation": "1.03 Days", "revolution": "1.88 Years", "radius": "3,389.5 KM", "temperature": "-28°c",
+                "images": {
+                    "planet": "https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg",
+                    "internal": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Mars_structure.svg/1024px-Mars_structure.svg.png",
+                    "geology": "https://upload.wikimedia.org/wikipedia/commons/9/93/Perseverance_landing_site_from_orbit.jpg"
+                }, "color": "#D14C32"
+            },
+            "Jupiter": {
+                "overview": { "content": "Jupiter is the fifth planet from the Sun and the largest in the Solar System. It is a gas giant with a mass more than two and a half times that of all the other planets in the Solar System combined.", "source": "https://en.wikipedia.org/wiki/Jupiter" },
+                "structure": { "content": "When arriving at Jupiter, Juno observed that the Great Red Spot was rooted deep in the planet's atmosphere. The storm is about 300–500 km deep, and is a broad, powerful storm that has been raging for centuries.", "source": "https://en.wikipedia.org/wiki/Jupiter#Internal_structure" },
+                "geology": { "content": "The best known feature of Jupiter is the Great Red Spot, a persistent anticyclonic storm located 22° south of the equator. It is known to have existed since at least 1831, and possibly since 1665.", "source": "https://en.wikipedia.org/wiki/Jupiter#Atmosphere" },
+                "rotation": "9.93 Hours", "revolution": "11.86 Years", "radius": "69,911 KM", "temperature": "-108°c",
+                "images": {
+                    "planet": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg",
+                    "internal": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Jupiter_structure.svg/1024px-Jupiter_structure.svg.png",
+                    "geology": "https://upload.wikimedia.org/wikipedia/commons/7/71/PIA22946-Jupiter-RedSpot-Juno-20190212.jpg"
+                }, "color": "#D83A3D"
+            },
+            "Saturn": {
+                "overview": { "content": "Saturn is the sixth planet from the Sun and the second-largest in the Solar System, after Jupiter. It is a gas giant with an average radius of about nine and a half times that of Earth.", "source": "https://en.wikipedia.org/wiki/Saturn" },
+                "structure": { "content": "Despite consisting mostly of hydrogen and helium, most of Saturn's mass is not in the gas phase, because hydrogen becomes a non-ideal liquid when the density is above 0.01 g/cm3.", "source": "https://en.wikipedia.org/wiki/Saturn#Internal_structure" },
+                "geology": { "content": "The planet's most famous feature is its prominent ring system, which is composed mostly of ice particles with a smaller amount of rocky debris and dust. At least 83 moons are known to orbit Saturn.", "source": "https://en.wikipedia.org/wiki/Saturn#Ring_system" },
+                "rotation": "10.8 Hours", "revolution": "29.45 Years", "radius": "58,232 KM", "temperature": "-138°c",
+                "images": {
+                    "planet": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg",
+                    "internal": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Saturn_structure.svg/1024px-Saturn_structure.svg.png",
+                    "geology": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Saturn_and_its_rings_-_January_2023_%28JWST%29.jpg/1280px-Saturn_and_its_rings_-_January_2023_%28JWST%29.jpg"
+                }, "color": "#CD5120"
+            },
+            "Uranus": {
+                "overview": { "content": "Uranus is the seventh planet from the Sun. Its name is a reference to the Greek god of the sky, Uranus. It has the third-largest planetary radius and fourth-largest planetary mass in the Solar System.", "source": "https://en.wikipedia.org/wiki/Uranus" },
+                "structure": { "content": "The standard model of Uranus's structure is that it consists of three layers: a rocky core in the centre, an icy mantle in the middle and an outer gaseous hydrogen/helium envelope.", "source": "https://en.wikipedia.org/wiki/Uranus#Internal_structure" },
+                "geology": { "content": "The composition of Uranus's atmosphere is different from its bulk, consisting mainly of molecular hydrogen and helium. The helium molar fraction is 0.152±0.008 in the upper troposphere.", "source": "https://en.wikipedia.org/wiki/Uranus#Atmosphere" },
+                "rotation": "17.2 Hours", "revolution": "84 Years", "radius": "25,362 KM", "temperature": "-195°c",
+                "images": {
+                    "planet": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Uranus_as_seen_by_NASA%27s_Voyager_2_%28remastered%29_-_JPEG_converted.jpg",
+                    "internal": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Uranus_structure.svg/1024px-Uranus_structure.svg.png",
+                    "geology": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Uranus_rings_and_moons_by_JWST_from_2023.jpg"
+                }, "color": "#1ec1a2"
+            },
+            "Neptune": {
+                "overview": { "content": "Neptune is the eighth and farthest-known Solar planet from the Sun. In the Solar System, it is the fourth-largest planet by diameter, the third-most-massive planet, and the densest giant planet.", "source": "https://en.wikipedia.org/wiki/Neptune" },
+                "structure": { "content": "Neptune's internal structure is similar to Uranus's. Its atmosphere forms about 5% to 10% of its mass and extends perhaps 10% to 20% of the way towards the core.", "source": "https://en.wikipedia.org/wiki/Neptune#Internal_structure" },
+                "geology": { "content": "Neptune's atmosphere is 80% hydrogen and 19% helium. A trace amount of methane is also present. Prominent absorption bands of methane exist at wavelengths above 600 nm.", "source": "https://en.wikipedia.org/wiki/Neptune#Atmosphere" },
+                "rotation": "16.08 Hours", "revolution": "164.8 Years", "radius": "24,622 KM", "temperature": "-201°c",
+                "images": {
+                    "planet": "https://upload.wikimedia.org/wikipedia/commons/6/63/Neptune_-_Voyager_2_%2829347980845%29_transparent.png",
+                    "internal": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Neptune_structure.svg/1024px-Neptune_structure.svg.png",
+                    "geology": "https://upload.wikimedia.org/wikipedia/commons/9/95/Neptune%27s_Great_Dark_Spot.jpg"
+                }, "color": "#2d68f0"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const desktopNav = document.getElementById('desktop-nav');
+            const mobileNav = document.getElementById('mobile-nav');
+            const tabsContainer = document.getElementById('tabs');
+            const statsGrid = document.getElementById('stats-grid');
+
+            const planetNameEl = document.getElementById('planet-name');
+            const planetImageEl = document.getElementById('planet-image');
+            const geologyImageEl = document.getElementById('geology-image');
+            const planetDescriptionEl = document.getElementById('planet-description');
+            const planetSourceEl = document.getElementById('planet-source');
+
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            let currentPlanet = 'Earth';
+            let currentTab = 'overview';
+
+            function updateUI() {
+                const data = planetData[currentPlanet];
+                const tabData = data[currentTab];
+
+                document.documentElement.style.setProperty('--planet-color', data.color);
+                planetNameEl.textContent = currentPlanet;
+                planetDescriptionEl.textContent = tabData.content;
+                planetSourceEl.href = tabData.source;
+
+                geologyImageEl.classList.add('hidden');
+                planetImageEl.style.transform = 'scale(1)'; // Reset scale
+
+                switch (currentTab) {
+                    case 'overview':
+                        planetImageEl.src = data.images.planet;
+                        planetImageEl.alt = `Illustration of ${currentPlanet}`;
+                        break;
+                    case 'structure':
+                        planetImageEl.src = data.images.internal;
+                        planetImageEl.alt = `Illustration of ${currentPlanet}'s internal structure`;
+                        break;
+                    case 'geology':
+                        planetImageEl.src = data.images.planet;
+                        planetImageEl.alt = `Illustration of ${currentPlanet}`;
+                        geologyImageEl.src = data.images.geology;
+                        geologyImageEl.alt = `Illustration of ${currentPlanet}'s surface geology`;
+                        geologyImageEl.classList.remove('hidden');
+                        break;
+                }
+                
+                statsGrid.innerHTML = `
+                    <div class="border border-white/20 p-4 lg:p-6 flex items-center justify-between md:flex-col md:items-start">
+                        <h4 class="text-xs text-white/50 font-bold tracking-widest">ROTATION TIME</h4>
+                        <p class="text-2xl md:text-4xl antonio">${data.rotation}</p>
+                    </div>
+                    <div class="border border-white/20 p-4 lg:p-6 flex items-center justify-between md:flex-col md:items-start">
+                        <h4 class="text-xs text-white/50 font-bold tracking-widest">REVOLUTION TIME</h4>
+                        <p class="text-2xl md:text-4xl antonio">${data.revolution}</p>
+                    </div>
+                    <div class="border border-white/20 p-4 lg:p-6 flex items-center justify-between md:flex-col md:items-start">
+                        <h4 class="text-xs text-white/50 font-bold tracking-widest">RADIUS</h4>
+                        <p class="text-2xl md:text-4xl antonio">${data.radius}</p>
+                    </div>
+                    <div class="border border-white/20 p-4 lg:p-6 flex items-center justify-between md:flex-col md:items-start">
+                        <h4 class="text-xs text-white/50 font-bold tracking-widest">AVERAGE TEMP.</h4>
+                        <p class="text-2xl md:text-4xl antonio">${data.temperature}</p>
+                    </div>
+                `;
+
+                document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+                    link.classList.toggle('active', link.dataset.planet === currentPlanet);
+                });
+
+                document.querySelectorAll('.tab-button').forEach(button => {
+                    button.classList.toggle('active', button.dataset.tab === currentTab);
+                });
+            }
+
+            function setupNav() {
+                const planets = Object.keys(planetData);
+                desktopNav.innerHTML = planets.map(planet => `
+                    <li class="h-full flex items-center">
+                        <a href="#" class="nav-link relative text-sm font-bold uppercase tracking-widest text-white/75 hover:text-white transition-colors" data-planet="${planet}">${planet}</a>
+                    </li>
+                `).join('');
+                
+                mobileNav.innerHTML = planets.map(planet => `
+                    <li class="py-5">
+                        <a href="#" class="mobile-nav-link relative flex items-center" data-planet="${planet}">
+                            <span class="w-5 h-5 rounded-full mr-6" style="background-color: ${planetData[planet].color}"></span>
+                            <span class="text-lg font-bold uppercase tracking-widest">${planet}</span>
+                            <svg class="absolute right-0" xmlns="http://www.w3.org/2000/svg" width="6" height="10"><path fill="none" stroke="#FFF" opacity=".4" d="m1 1 4 4-4 4"/></svg>
+                        </a>
+                    </li>
+                `).join('');
+            }
+            
+            function setupTabs() {
+                const tabInfo = [
+                    { id: 'overview', label: 'Overview', num: '01' },
+                    { id: 'structure', label: 'Internal Structure', num: '02' },
+                    { id: 'geology', label: 'Surface Geology', num: '03' }
+                ];
+                tabsContainer.innerHTML = tabInfo.map(tab => `
+                    <button class="tab-button w-full text-left border border-white/20 p-3 mb-4 hover:bg-white/20 transition-colors flex items-center" data-tab="${tab.id}">
+                        <span class="text-xs text-white/50 font-bold mr-4">${tab.num}</span>
+                        <span class="text-xs font-bold uppercase tracking-widest">${tab.label}</span>
+                    </button>
+                `).join('');
+            }
+
+            function handleNavClick(e, isMobile) {
+                const link = e.target.closest(isMobile ? '.mobile-nav-link' : '.nav-link');
+                if (link) {
+                    e.preventDefault();
+                    currentPlanet = link.dataset.planet;
+                    currentTab = 'overview';
+                    updateUI();
+                    if (isMobile) {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuToggle.querySelector('svg').classList.remove('opacity-50');
+                    }
+                }
+            }
+
+            desktopNav.addEventListener('click', (e) => handleNavClick(e, false));
+            mobileNav.addEventListener('click', (e) => handleNavClick(e, true));
+
+            tabsContainer.addEventListener('click', (e) => {
+                const button = e.target.closest('.tab-button');
+                if (button) {
+                    e.preventDefault();
+                    currentTab = button.dataset.tab;
+                    updateUI();
+                }
+            });
+
+            mobileMenuToggle.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.toggle('hidden');
+                mobileMenuToggle.querySelector('svg').classList.toggle('opacity-50', !isHidden);
+            });
+
+            // Initial setup
+            setupNav();
+            setupTabs();
+            updateUI();
+        });
+    </script>
+</body>
+</html>
